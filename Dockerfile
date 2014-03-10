@@ -14,12 +14,13 @@ RUN apt-get update
 RUN apt-get install -y software-properties-common python-software-properties curl
 RUN add-apt-repository -y ppa:nginx/stable
 RUN apt-get update
-RUN apt-get install -y nginx php5-common php5-cli php5-fpm php5-mcrypt php5-sasl
+RUN apt-get install -y nginx php5-common php5-cli php5-fpm php5-mysql php5-curl
 RUN apt-get install -y zend-framework zend-framework-bin supervisor
 RUN echo "\ndaemon off;" >> /etc/nginx/nginx.conf
 
 RUN perl -i -pe 's/listen = .*/listen = \/var\/run\/php5-fpm.sock/' /etc/php5/fpm/pool.d/www.conf
 RUN perl -i -pe 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/' /etc/php5/fpm/php.ini
+RUN perl -i -pe 's/;daemonize = yes/daemonize = no/' /etc/php5/fpm/php-fpm.conf
 
 ADD . /src 
 RUN cp /src/sites-default /etc/nginx/sites-available/default
